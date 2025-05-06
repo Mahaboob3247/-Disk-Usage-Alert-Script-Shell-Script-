@@ -1,0 +1,86 @@
+# 🧠 Disk Usage Alert Script (Shell Script)
+
+This is a simple and effective **Bash shell script** to monitor disk usage on a Linux system. When disk usage exceeds a specified threshold (default: **80%**), the script automatically sends an **email alert** to the system administrator.
+
+---
+
+## 📌 Features
+
+- ✅ Monitors root partition (`/`) disk usage  
+- ✅ Sends an email alert if usage exceeds a defined threshold  
+- ✅ Customizable threshold value  
+- ✅ Ideal for system administrators and DevOps engineers  
+- ✅ Can be scheduled using `cron` for automated monitoring  
+
+---
+
+## 📝 Script Overview
+
+```bash
+#!/bin/bash
+
+# Set the threshold value (in percentage)
+THRESHOLD=80
+
+# Get current disk usage of root partition
+DISK_USAGE=$(df / | grep / | awk '{ print $5 }' | sed 's/%//g')
+
+# Check if disk usage exceeds threshold
+if [ "$DISK_USAGE" -gt "$THRESHOLD" ]; then
+  echo "Disk usage is above ${THRESHOLD}%: ${DISK_USAGE}% used" | mail -s "Disk Usage Alert: ${DISK_USAGE}% used" admin@example.com
+  echo "Alert sent to admin@example.com"
+else
+  echo "Disk usage is under control: ${DISK_USAGE}% used"
+fi
+```
+
+> ⚠️ Replace `admin@example.com` with your actual email address.
+
+---
+
+## ⚙️ Requirements
+
+- Linux OS
+- `mailutils` or similar package to send email alerts:
+  ```bash
+  sudo apt install mailutils
+  ```
+
+---
+
+## 🕑 Automate with Cron
+
+To run this script daily at 9 AM:
+
+1. Open your crontab:
+   ```bash
+   crontab -e
+   ```
+
+2. Add this line:
+   ```bash
+   0 9 * * * /path/to/disk_usage_alert.sh
+   ```
+
+---
+
+## 📥 Usage
+
+1. Clone or download this repository.
+2. Make the script executable:
+   ```bash
+   chmod +x disk_usage_alert.sh
+   ```
+3. Run the script manually or set up a cron job.
+
+---
+
+## 🙌 Contribution
+
+Feel free to fork this repository and suggest improvements or create pull requests to add more system monitoring features!
+
+---
+
+## 📫 License
+
+This project is open-source under the [MIT License](LICENSE).
